@@ -18,23 +18,42 @@ const port = 3000;
 //   res.status(200).send('You can now post in this URL...');
 // });
 
+//JSON. parse() is a crucial method for converting JSON data in string form into Javascript objects.
+// typeof tours->object;after parsing
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
 
+// .get():retrive the data
 app.get('/api/v1/tours', (req, res) => {
   // using JSEND specification for the response
+  /*
+  {
+    status : "success",
+    // Enveloping
+    data : {
+      ---Original Object--
+      
+    }
+  }
+  */
+
   res.status(200).json({
     status: 'success',
+
     result: tours.length,
     data: {
+      // url-endpoint(eg:/tours):actual-object,
       tours: tours,
     },
   });
 });
 
+//.post(): create new
+// With POST request, we can send data from CLIENT to the SERVER & the data is availiable on the reques
+
 app.post('/api/v1/tours', (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
 
   const newId = tours[tours.length - 1].id + 1;
   const newTour = Object.assign({ id: newId }, req.body);
@@ -43,9 +62,10 @@ app.post('/api/v1/tours', (req, res) => {
 
   fs.writeFile(
     `${__dirname}/dev-data/datat/tours-simple.json`,
-    JSON.stringify(tours),
+    JSON.stringify(tours), //converting JS values to JSON
     (err) => {
       res.status(201).json({
+        //.status(201)-The request has been fulfilled and resulted in a new resource being created
         status: 'success',
         data: {
           tour: newTour,
