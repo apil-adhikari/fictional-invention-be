@@ -1,9 +1,13 @@
 const fs = require('fs');
 const express = require('express');
+const morgan = require('morgan');
 
 const app = express();
 
-// Middleware
+// 1) MIDDLEWARES
+
+app.use(morgan('dev'));
+
 app.use(express.json());
 
 // Custom Middleware
@@ -36,7 +40,7 @@ const tours = JSON.parse(
 );
 
 /*------------------------*/
-// Seprating Request Handler
+// 2) REQUEST HANDLERS
 const getAllTours = (req, res) => {
   // using JSEND specification for the response
   /*
@@ -167,6 +171,8 @@ const deleteTour = (req, res) => {
 
 // Refactoring the code
 
+// 3) ROUTES
+
 app.route('/api/v1/tours').get(getAllTours).post(createTour);
 
 app
@@ -176,6 +182,7 @@ app
   .delete(deleteTour);
 
 // Listining on port
+// 4) START SERVER
 app.listen(port, '127.0.0.1', () => {
   console.log(`App is running on port ${port}...`);
 });
