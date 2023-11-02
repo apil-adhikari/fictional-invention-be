@@ -107,6 +107,25 @@ app.post('/api/v1/tours', (req, res) => {
   );
 });
 /*------------------------*/
+
+//Updating Data [1) PUT, 2) PACTCH]
+//Handling PATCH Requests to Update data
+app.patch('/api/v1/tours/:id', (req, res) => {
+  if (req.params.id * 1 > tours.length) {
+    res.status(404).json({
+      status: 'fail',
+      message: 'Invalid ID',
+    });
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      tour: '<Updated Tour here...>',
+    },
+  });
+});
+
 // Listining on port
 app.listen(port, '127.0.0.1', () => {
   console.log(`App is running on port ${port}...`);
