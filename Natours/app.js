@@ -6,6 +6,17 @@ const app = express();
 // Middleware
 app.use(express.json());
 
+// Custom Middleware
+app.use((req, res, next) => {
+  console.log('Hello from the middleware👋...');
+  next();
+});
+
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString();
+  next();
+});
+
 const port = 3000;
 
 // app.get('/', (req, res) => {
@@ -39,9 +50,10 @@ const getAllTours = (req, res) => {
   }
   */
 
+  console.log(req.requestTime);
   res.status(200).json({
     status: 'success',
-
+    requestedAt: req.requestTime,
     result: tours.length,
     data: {
       // url-endpoint(eg:/tours):actual-object,
@@ -156,6 +168,7 @@ const deleteTour = (req, res) => {
 // Refactoring the code
 
 app.route('/api/v1/tours').get(getAllTours).post(createTour);
+
 app
   .route('/api/v1/tours/:id')
   .get(getTour)
