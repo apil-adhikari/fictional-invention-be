@@ -49,6 +49,15 @@ app.get('/api/v1/tours', (req, res) => {
   });
 });
 
+/*------------------------*/
+// Route Parameters
+// Responding to URL parameters
+// Create variable using /:var in the URL(eg:/api/v1/tours/:id/:x/:y)
+app.get('/api/v1/tours/:id/:x/:y', (req, res) => {
+  console.log(req.params);
+  res.send('Done');
+});
+
 //.post(): create new
 // With POST request, we can send data from CLIENT to the SERVER & the data is availiable on the reques
 
