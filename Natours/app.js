@@ -24,6 +24,7 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
 
+/*------------------------*/
 // .get():retrive the data
 app.get('/api/v1/tours', (req, res) => {
   // using JSEND specification for the response
@@ -53,11 +54,33 @@ app.get('/api/v1/tours', (req, res) => {
 // Route Parameters
 // Responding to URL parameters
 // Create variable using /:var in the URL(eg:/api/v1/tours/:id/:x/:y)
-app.get('/api/v1/tours/:id/:x/:y', (req, res) => {
+// Optional Parameter(/:var?): in the URL(eg:/api/v1/tours/:id/:x/:y?) y part is now opional parameter.
+app.get('/api/v1/tours/:id', (req, res) => {
   console.log(req.params);
-  res.send('Done');
+  const id = req.params.id * 1;
+
+  // finding the the spcecific object that has id on the request parameter.
+  // .find() method returns true if the condition is met otherwise undefined
+  const tour = tours.find((el) => el.id === id);
+
+  // checking if the requested id exists?
+  if (id > tours.length) {
+    // if (!tour) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'ID not found',
+    });
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      tours: tour,
+    },
+  });
 });
 
+/*------------------------*/
 //.post(): create new
 // With POST request, we can send data from CLIENT to the SERVER & the data is availiable on the reques
 
@@ -83,7 +106,7 @@ app.post('/api/v1/tours', (req, res) => {
     }
   );
 });
-
+/*------------------------*/
 // Listining on port
 app.listen(port, '127.0.0.1', () => {
   console.log(`App is running on port ${port}...`);
