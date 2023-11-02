@@ -25,8 +25,8 @@ const tours = JSON.parse(
 );
 
 /*------------------------*/
-// .get():retrive the data
-app.get('/api/v1/tours', (req, res) => {
+// Seprating Request Handler
+const getAllTours = (req, res) => {
   // using JSEND specification for the response
   /*
   {
@@ -48,14 +48,9 @@ app.get('/api/v1/tours', (req, res) => {
       tours: tours,
     },
   });
-});
+};
 
-/*------------------------*/
-// Route Parameters
-// Responding to URL parameters
-// Create variable using /:var in the URL(eg:/api/v1/tours/:id/:x/:y)
-// Optional Parameter(/:var?): in the URL(eg:/api/v1/tours/:id/:x/:y?) y part is now opional parameter.
-app.get('/api/v1/tours/:id', (req, res) => {
+const getTour = (req, res) => {
   console.log(req.params);
   const id = req.params.id * 1;
 
@@ -78,13 +73,9 @@ app.get('/api/v1/tours/:id', (req, res) => {
       tours: tour,
     },
   });
-});
+};
 
-/*------------------------*/
-//.post(): create new
-// With POST request, we can send data from CLIENT to the SERVER & the data is availiable on the reques
-
-app.post('/api/v1/tours', (req, res) => {
+const createTour = (req, res) => {
   // console.log(req.body);
 
   const newId = tours[tours.length - 1].id + 1;
@@ -105,12 +96,9 @@ app.post('/api/v1/tours', (req, res) => {
       });
     }
   );
-});
-/*------------------------*/
+};
 
-//Updating Data [1) PUT, 2) PACTCH]
-//Handling PATCH Requests to Update data
-app.patch('/api/v1/tours/:id', (req, res) => {
+const updateTour = (req, res) => {
   if (req.params.id * 1 > tours.length) {
     res.status(404).json({
       status: 'fail',
@@ -124,11 +112,9 @@ app.patch('/api/v1/tours/:id', (req, res) => {
       tour: '<Updated Tour here...>',
     },
   });
-});
+};
 
-// Deleting Data
-// Handling DELETE Requests
-app.delete('/api/v1/tours/:id', (req, res) => {
+const deleteTour = (req, res) => {
   if (req.params.id * 1 > tours.length) {
     return res.status(404).json({
       status: 'fail',
@@ -140,7 +126,41 @@ app.delete('/api/v1/tours/:id', (req, res) => {
     status: 'success',
     data: null,
   });
-});
+};
+/*------------------------*/
+// .get():retrive the data
+// app.get('/api/v1/tours', getAllTours);
+
+/*------------------------*/
+// Route Parameters
+// Responding to URL parameters
+// Create variable using /:var in the URL(eg:/api/v1/tours/:id/:x/:y)
+// Optional Parameter(/:var?): in the URL(eg:/api/v1/tours/:id/:x/:y?) y part is now opional parameter.
+// app.get('/api/v1/tours/:id', getTour);
+
+/*------------------------*/
+//.post(): create new
+// With POST request, we can send data from CLIENT to the SERVER & the data is availiable on the reques
+
+// app.post('/api/v1/tours', createTour);
+/*------------------------*/
+
+//Updating Data [1) PUT, 2) PACTCH]
+//Handling PATCH Requests to Update data
+// app.patch('/api/v1/tours/:id', createTour);
+
+// Deleting Data
+// Handling DELETE Requests
+// app.delete('/api/v1/tours/:id', deleteTour);
+
+// Refactoring the code
+
+app.route('/api/v1/tours').get(getAllTours).post(createTour);
+app
+  .route('/api/v1/tours/:id')
+  .get(getTour)
+  .patch(createTour)
+  .delete(deleteTour);
 
 // Listining on port
 app.listen(port, '127.0.0.1', () => {
