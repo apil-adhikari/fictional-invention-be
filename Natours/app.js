@@ -1,17 +1,21 @@
 const fs = require('fs');
-const express = require('express');
 const morgan = require('morgan');
+const express = require('express');
+const app = express();
 
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 
-const app = express();
-
 // 1) MIDDLEWARES
-
-app.use(morgan('dev'));
+// console.log(process.env.NODE_ENV);
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
 
 app.use(express.json());
+
+// Serve static file from folder
+app.use(express.static(`${__dirname}/public`));
 
 // Custom Middleware
 app.use((req, res, next) => {
