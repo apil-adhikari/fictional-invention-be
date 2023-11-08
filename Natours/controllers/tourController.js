@@ -4,6 +4,19 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
 );
 
+// checking if the requested id exists [for all cases getTour,updateTour..]
+exports.checkID = (req, res, next, val) => {
+  console.log(`Tour id is : ${val}`);
+  const id = req.params.id * 1;
+  if (id > tours.length) {
+    // if (!tour) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'ID not found',
+    });
+  }
+  next();
+};
 exports.getAllTours = (req, res) => {
   // using JSEND specification for the response
   /*
@@ -37,15 +50,6 @@ exports.getTour = (req, res) => {
   // .find() method returns true if the condition is met otherwise undefined
   const tour = tours.find((el) => el.id === id);
 
-  // checking if the requested id exists?
-  if (id > tours.length) {
-    // if (!tour) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'ID not found',
-    });
-  }
-
   res.status(200).json({
     status: 'success',
     data: {
@@ -78,13 +82,6 @@ exports.createTour = (req, res) => {
 };
 
 exports.updateTour = (req, res) => {
-  if (req.params.id * 1 > tours.length) {
-    res.status(404).json({
-      status: 'fail',
-      message: 'Invalid ID',
-    });
-  }
-
   res.status(200).json({
     status: 'success',
     data: {
@@ -94,13 +91,6 @@ exports.updateTour = (req, res) => {
 };
 
 exports.deleteTour = (req, res) => {
-  if (req.params.id * 1 > tours.length) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'Invalid ID',
-    });
-  }
-
   res.status(204).json({
     status: 'success',
     data: null,
