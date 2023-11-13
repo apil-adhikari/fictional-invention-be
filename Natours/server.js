@@ -23,32 +23,23 @@ mongoose
   })
   .then((con) => {
     console.log('DB connection successful!');
-    console.log(con.connection);
   });
 
-// Schema for tours
-// describing schema:(Blueprint of logical layout of database)
-const tourSchema = new mongoose.Schema({
-  // field : data-type,
-  // Schema Type Options
-
-  name: {
-    type: String,
-    required: [true, 'A tour must have a name'],
-    unique: true,
-  },
-  price: {
-    type: Number,
-    required: [true, 'A tour must have a price'],
-  },
-  rating: {
-    type: Number,
-    default: 4.5,
-  },
+/* creating document & testing 
+const testTour = new Tour({
+  name: 'The Park Camper',
+  price: 997,
 });
 
-// modle
-const Tour = mongoose.model('Tour', tourSchema);
+testTour
+  .save()
+  .then((doc) => {
+    console.log(doc);
+  })
+  .catch((err) => {
+    console.log('ERROR 💥:', err);
+  });
+*/
 
 const port = process.env.PORT || 3000;
 app.listen(port, '127.0.0.1', () => {

@@ -6,7 +6,7 @@ const tourController = require('./../controllers/tourController');
 const router = express.Router();
 
 // Middleware function with custom parameter.
-router.param('id', tourController.checkID);
+// router.param('id', tourController.checkID);
 
 router
   .route('/')
