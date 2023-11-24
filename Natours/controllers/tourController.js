@@ -41,7 +41,25 @@ const Tour = require('../models/tourModel');
 
 exports.getAllTours = async (req, res) => {
   try {
-    const tours = await Tour.find();
+    // BUILD QUERY
+    // making copy of query object(a hard copy of the query object, because if we update the querry object without making it solid copy, it will result the changes in the original object)
+    const queryObj = { ...req.query };
+
+    // we should exclude field such as: page, sort, limit, fields etc.
+    const excludedFields = ['page', 'sort', 'limit', 'fields'];
+
+    excludedFields.forEach((el) => delete queryObj[el]);
+
+    console.log(req.query, queryObj);
+
+    const query = Tour.find(queryObj);
+
+    // const query =Tour.find()
+    //   .where('duration')
+    //   .equals(5)
+    //   .where('difficulty')
+    //   .equals('easy');
+
     // using JSEND specification for the response
     /*
       {
@@ -53,7 +71,10 @@ exports.getAllTours = async (req, res) => {
         }
       }
       */
+    // EXECUTE QUERY
+    const tours = await query;
 
+    // SEND RESPONSE
     res.status(200).json({
       status: 'success',
       result: tours.length,
