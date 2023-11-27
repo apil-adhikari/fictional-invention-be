@@ -56,7 +56,7 @@ exports.getAllTours = async (req, res) => {
     // 2) Advance Filtering
 
     // {difficulty:'easy', duration: {$gte : 5}}
-    // {difficulty:'easy', duration: {gte : 5}}
+    //Querry Params: {difficulty:'easy', duration: {gte : 5}}
 
     let queryString = JSON.stringify(queryObj);
 
