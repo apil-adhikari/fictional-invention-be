@@ -42,6 +42,7 @@ const Tour = require('../models/tourModel');
 exports.getAllTours = async (req, res) => {
   try {
     // BUILD QUERY
+    // 1) Filtering
     // making copy of query object(a hard copy of the query object, because if we update the querry object without making it solid copy, it will result the changes in the original object)
     const queryObj = { ...req.query };
 
@@ -52,7 +53,21 @@ exports.getAllTours = async (req, res) => {
 
     console.log(req.query, queryObj);
 
-    const query = Tour.find(queryObj);
+    // 2) Advance Filtering
+
+    // {difficulty:'easy', duration: {$gte : 5}}
+    // {difficulty:'easy', duration: {gte : 5}}
+
+    let queryString = JSON.stringify(queryObj);
+
+    // TO REPLACE WITH: gte, gt, lte, lt
+    queryString = queryString.replace(
+      /\b(gte|gt|lte|lt)\b/g,
+      (match) => `$${match}`,
+    );
+    console.log(JSON.parse(queryString));
+
+    const query = Tour.find(JSON.parse(queryString));
 
     // const query =Tour.find()
     //   .where('duration')
@@ -109,7 +124,7 @@ exports.getTour = async (req, res) => {
     });
   }
 
-  console.log(req.params);
+  // console.log(req.params);
   // const id = req.params.id * 1;
   // finding the the spcecific object that has id on the request parameter.
   // .find() method returns true if the condition is met otherwise undefined
