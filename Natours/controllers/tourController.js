@@ -42,7 +42,7 @@ const Tour = require('../models/tourModel');
 exports.getAllTours = async (req, res) => {
   try {
     // BUILD QUERY
-    // 1) Filtering
+    // 1A) Filtering
     // making copy of query object(a hard copy of the query object, because if we update the querry object without making it solid copy, it will result the changes in the original object)
     const queryObj = { ...req.query };
 
@@ -53,7 +53,7 @@ exports.getAllTours = async (req, res) => {
 
     console.log(req.query, queryObj);
 
-    // 2) Advance Filtering
+    // 1B) Advance Filtering
 
     // {difficulty:'easy', duration: {$gte : 5}}
     //Querry Params: {difficulty:'easy', duration: {gte : 5}}
@@ -65,9 +65,21 @@ exports.getAllTours = async (req, res) => {
       /\b(gte|gt|lte|lt)\b/g,
       (match) => `$${match}`,
     );
-    console.log(JSON.parse(queryString));
+    // console.log(JSON.parse(queryString));
 
-    const query = Tour.find(JSON.parse(queryString));
+    let query = Tour.find(JSON.parse(queryString));
+
+    // 2) Sorting
+    if (req.query.sort) {
+      //if results are same second parameter is used to sort as: sort('price ratingsAverage ')
+      const sortBy = req.query.sort.split(',').join(' ');
+      // console.log(sortBy);
+
+      // SORTING IN ASCENDING ORDER
+      query = query.sort(sortBy);
+    } else {
+      query = query.sort('-createdAt');
+    }
 
     // const query =Tour.find()
     //   .where('duration')
