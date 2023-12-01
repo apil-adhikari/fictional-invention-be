@@ -39,6 +39,14 @@ const Tour = require('../models/tourModel');
 //   next();
 // };
 
+// aliasTopTours() is a middleware function to be called for specific route(ex: /top-5-tours) before getAllTours so the query can be manipulated
+exports.aliasTopTours = async (req, res, next) => {
+  req.query.limit = '5';
+  req.query.sort = '-ratingsAverage,price';
+  req.query.fields = 'name,difficulty,price,ratingsAverage, summary';
+  next();
+};
+
 exports.getAllTours = async (req, res) => {
   try {
     // BUILD QUERY
