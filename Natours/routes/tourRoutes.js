@@ -8,6 +8,8 @@ const router = express.Router();
 // Middleware function with custom parameter.
 // router.param('id', tourController.checkID);
 
+router.route('/tour-stats').get(tourController.getTourStats);
+
 router
   .route('/top-5-tours')
   .get(tourController.aliasTopTours, tourController.getAllTours);
