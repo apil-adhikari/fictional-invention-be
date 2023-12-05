@@ -10,6 +10,9 @@ const router = express.Router();
 
 router.route('/tour-stats').get(tourController.getTourStats);
 
+// /monthly-plan/:year -> :year is url parameter
+router.route('/monthly-plan/:year').get(tourController.getMonthyPlan);
+
 router
   .route('/top-5-tours')
   .get(tourController.aliasTopTours, tourController.getAllTours);

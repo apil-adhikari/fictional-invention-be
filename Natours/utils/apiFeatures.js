@@ -46,8 +46,7 @@ class APIFeatures {
 
   paginate() {
     const page = this.queryString.page * 1 || 1;
-    const limit = this.queryString.limit * 1 || 1;
-
+    const limit = { ...this.queryString.limit } || 1;
     console.log('Page:', page);
     console.log('Limit:', limit);
 
